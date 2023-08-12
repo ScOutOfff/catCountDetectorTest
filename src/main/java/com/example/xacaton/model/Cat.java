@@ -1,7 +1,7 @@
 package com.example.xacaton.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,13 +12,24 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
+@Table(name = "Cat")
 public class Cat {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "filename")
     private String fileName;
 
-    private int catsCount;
+    @Column(name = "cats_first_count")
+    private int catsFirstCount;
+
+    @Column(name = "cats_second_count")
+    private int catsSecondCount;
+
+    public Cat() {}
 
     @Override
     public boolean equals(Object o) {
