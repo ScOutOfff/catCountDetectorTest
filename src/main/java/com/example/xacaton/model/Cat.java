@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 @Table(name = "Cat")
 public class Cat {
 

@@ -1,5 +1,6 @@
 package com.example.xacaton.neuronet;
 
+import lombok.extern.java.Log;
 import org.opencv.core.*;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -7,14 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.concurrent.atomic.AtomicReference;
 
+@Log
 public class CatImageDetector {
     MatOfRect faces = new MatOfRect();
     MatOfRect faces2 = new MatOfRect();
 
-    public static int[] method(BufferedImage image) {
+    public static int[] countCatsAndMarkIt(BufferedImage image) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         final int[][] catCount = new int[1][1];
@@ -28,7 +28,7 @@ public class CatImageDetector {
             g2d.setColor(Color.RED);
             g2d.setStroke(new BasicStroke(5));
             CatImageDetector detecor = new CatImageDetector();
-            catCount[0] = detecor.work_with_image(image);
+            catCount[0] = detecor.countCatsFromImage(image);
             Rect[] array = detecor.faces.toArray();
             for (Rect rect : array) {
                 g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
@@ -51,18 +51,19 @@ public class CatImageDetector {
             window.getContentPane().add(lbl, BorderLayout.CENTER);
             window.pack();
             window.setVisible(true);
+            //TODO save image with marked cats
         });
         return catCount[0];
     }
 
-    private int[] work_with_image(BufferedImage img) {
+    private int[] countCatsFromImage(BufferedImage img) {
         int[] rez = {0, 0};
         CascadeClassifier face_cascade = new CascadeClassifier("haarcascade_frontalcatface.xml");
         if (face_cascade.empty()) {
-            System.out.println("Ошибка загрузки");
+            log.warning("Load Error");
             return rez;
         } else {
-            System.out.println("Загрузили \"haarcascade_frontalcatface\"");
+            log.info("Load \"haarcascade_frontalcatface\"");
         }
 
         byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
@@ -72,20 +73,20 @@ public class CatImageDetector {
         face_cascade.detectMultiScale(inputFrame, faces);
         rez[0] = faces.toArray().length;
 
-        System.out.println("Обнаружено " + rez[0] + " котов");
+        log.info(rez[0] + "cats detected");
 
         face_cascade = new CascadeClassifier("haarcascade_frontalcatface_extended.xml");
         if (face_cascade.empty()) {
-            System.out.println("Ошибка загрузки");
+            log.warning("Load Error");
             return rez;
         } else {
-            System.out.println("Загрузили \"haarcascade_frontalcatface_extended\"");
+            log.info("Load \"haarcascade_frontalcatface_extended\"");
         }
 
         face_cascade.detectMultiScale(inputFrame, faces2);
         rez[1] = faces.toArray().length;
 
-        System.out.println("Обнаружено " + rez[1] + " котов");
+        log.info(rez[1] + "cats detected");
         return rez;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.xacaton.controller;
 
+import com.example.xacaton.model.Cat;
 import com.example.xacaton.service.CatService;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,4 +30,6 @@ public class CatController {
         catService.countCatInImage(multipartFile);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+//    @GetMapping("/getCats")
 }

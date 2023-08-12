@@ -5,6 +5,7 @@ import com.example.xacaton.neuronet.CatImageDetector;
 import com.example.xacaton.repository.CatRepo;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -12,9 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.concurrent.atomic.AtomicReference;
 
+@Service
 public class CatServiceImpl implements CatService {
 
     private final CatRepo catRepo;
@@ -29,13 +29,13 @@ public class CatServiceImpl implements CatService {
         BufferedImage image;
         try {
             image = ImageIO.read(multipartFile.getInputStream());
-            ImageIO.write(image, Objects.requireNonNull(FilenameUtils.getExtension(multipartFile.getOriginalFilename())),
-                    new File(multipartFile.getOriginalFilename()));
+            File outputFile = new File("resources/" + multipartFile.getOriginalFilename());
+            ImageIO.write(image, FilenameUtils.getExtension(multipartFile.getOriginalFilename()), outputFile); //TODO
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        int[] count = CatImageDetector.method(image);
+        int[] count = CatImageDetector.countCatsAndMarkIt(image);
 
         Cat cat = Cat.builder()
                 .fileName(multipartFile.getName())
