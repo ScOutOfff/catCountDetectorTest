@@ -42,19 +42,6 @@ public class CatImageDetector {
                 g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
             }
             g2d.dispose();
-
-//            ImageIcon icon = new ImageIcon(image);
-//            JFrame window = new JFrame("Результат");
-//            window.setLocationByPlatform(true);
-//            window.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-//            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            JLabel lbl = new JLabel();
-//            lbl.setIcon(icon);
-//            window.add(lbl);
-//            window.getContentPane().add(lbl, BorderLayout.CENTER);
-//            window.pack();
-//            window.setVisible(true);
-            //TODO save image with marked cats
         });
         try {
             sleep(5_000);
