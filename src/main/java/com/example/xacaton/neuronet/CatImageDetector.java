@@ -1,16 +1,13 @@
 package com.example.xacaton.neuronet;
 
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.opencv.core.*;
-
 import org.opencv.objdetect.CascadeClassifier;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 

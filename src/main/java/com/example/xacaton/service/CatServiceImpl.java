@@ -3,7 +3,6 @@ package com.example.xacaton.service;
 import com.example.xacaton.model.Cat;
 import com.example.xacaton.neuronet.CatImageDetector;
 import com.example.xacaton.repository.CatRepo;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
