@@ -3,6 +3,8 @@ package com.example.xacaton.service;
 import com.example.xacaton.model.Cat;
 import com.example.xacaton.neuronet.CatImageDetector;
 import com.example.xacaton.repository.CatRepo;
+import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import static java.lang.Thread.sleep;
+
 @Service
+@Log
 public class CatServiceImpl implements CatService {
 
     private final CatRepo catRepo;
@@ -25,24 +30,29 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public void countCatInImage(MultipartFile multipartFile) {
+    public Cat countCatInImage(MultipartFile multipartFile) {
         BufferedImage image;
         try {
             image = ImageIO.read(multipartFile.getInputStream());
-            File outputFile = new File("resources/" + multipartFile.getOriginalFilename());
-            ImageIO.write(image, FilenameUtils.getExtension(multipartFile.getOriginalFilename()), outputFile); //TODO
+            File outputFile = new File("src/main/resources/images/" + multipartFile.getOriginalFilename());
+            ImageIO.write(image, Objects.requireNonNull(FilenameUtils.getExtension(multipartFile.getOriginalFilename())), outputFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         int[] count = CatImageDetector.countCatsAndMarkIt(image);
+        try {
+            sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         Cat cat = Cat.builder()
-                .fileName(multipartFile.getName())
+                .fileName(multipartFile.getOriginalFilename())
                 .catsFirstCount(count[0])
                 .catsSecondCount(count[1])
                 .build();
-        catRepo.save(cat);
+        return catRepo.save(cat);
     }
 
     @Override

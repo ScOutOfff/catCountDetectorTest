@@ -1,15 +1,20 @@
 package com.example.xacaton.neuronet;
 
 import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.opencv.core.*;
+
 import org.opencv.objdetect.CascadeClassifier;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.logging.Logger;
 
-@Log
+import static java.lang.Thread.sleep;
+
+@Log4j2
 public class CatImageDetector {
     MatOfRect faces = new MatOfRect();
     MatOfRect faces2 = new MatOfRect();
@@ -17,7 +22,7 @@ public class CatImageDetector {
     public static int[] countCatsAndMarkIt(BufferedImage image) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        final int[][] catCount = new int[1][1];
+        final int[][] catCount = {new int[0]};
 
         // вывести в окне картинку
         // нарисовать рамки в области распознавания
@@ -40,19 +45,25 @@ public class CatImageDetector {
                 g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
             }
             g2d.dispose();
-            ImageIcon icon = new ImageIcon(image);
-            JFrame window = new JFrame("Результат");
-            window.setLocationByPlatform(true);
-            window.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JLabel lbl = new JLabel();
-            lbl.setIcon(icon);
-            window.add(lbl);
-            window.getContentPane().add(lbl, BorderLayout.CENTER);
-            window.pack();
-            window.setVisible(true);
+//            ImageIcon icon = new ImageIcon(image);
+//            JFrame window = new JFrame("Результат");
+//            window.setLocationByPlatform(true);
+//            window.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+//            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            JLabel lbl = new JLabel();
+//            lbl.setIcon(icon);
+//            window.add(lbl);
+//            window.getContentPane().add(lbl, BorderLayout.CENTER);
+//            window.pack();
+//            window.setVisible(true);
             //TODO save image with marked cats
         });
+        try {
+            sleep(5_000);
+            // Заглушка дабы поток с распознованием успел завершиться
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return catCount[0];
     }
 
@@ -60,16 +71,16 @@ public class CatImageDetector {
         int[] rez = {0, 0};
         CascadeClassifier face_cascade = new CascadeClassifier("haarcascade_frontalcatface.xml");
         if (face_cascade.empty()) {
-            log.warning("Load Error");
+            log.error("Load Error");
             return rez;
         } else {
             log.info("Load \"haarcascade_frontalcatface\"");
         }
-
+//
         byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         Mat inputFrame = new Mat(img.getHeight(), img.getWidth(), CvType.CV_8UC3);
         inputFrame.put(0, 0, pixels);
-
+//
         face_cascade.detectMultiScale(inputFrame, faces);
         rez[0] = faces.toArray().length;
 
@@ -77,7 +88,7 @@ public class CatImageDetector {
 
         face_cascade = new CascadeClassifier("haarcascade_frontalcatface_extended.xml");
         if (face_cascade.empty()) {
-            log.warning("Load Error");
+            log.error("Load Error");
             return rez;
         } else {
             log.info("Load \"haarcascade_frontalcatface_extended\"");
