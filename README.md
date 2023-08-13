@@ -4,6 +4,10 @@
 - http://localhost:8080/cats/getCats/{id} - get-запрос принимающий id вместо {id}, отдает все то же, что и предыдующий запрос, ничего не сохраняет
 - http://localhost:8080/cats/getCatImage/{id} - get-запрос, принимающий id вместо {id}, отдает картинку с котом, которая была отправлена в первом запросе
 
+Для запуска проекта
+-
+Запустить класс XacatonApplication, который находится в src/main/java/com/example/xacaton/XacatonApplication
+
 Для правильной работы класса CatImageDetector сделать следующее
 - 
 - В Project Structure во вкладе Modules добавить в jars or directories модуль opencv-454 из папки OpenCV
