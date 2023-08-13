@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import static java.lang.Thread.sleep;
-
 @Service
 @Log
 public class CatServiceImpl implements CatService {
@@ -35,19 +33,23 @@ public class CatServiceImpl implements CatService {
             image = ImageIO.read(multipartFile.getInputStream());
             File outputFile = new File("src/main/resources/images/" + multipartFile.getOriginalFilename());
             ImageIO.write(image, Objects.requireNonNull(FilenameUtils.getExtension(multipartFile.getOriginalFilename())), outputFile);
+            log.info("saved image");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         int[] count = CatImageDetector.countCatsAndMarkIt(image);
+        File file = new File("src/main/resources/images/marked_" + multipartFile.getOriginalFilename());
         try {
-            sleep(5000);
-        } catch (InterruptedException e) {
+            ImageIO.write(image, Objects.requireNonNull(FilenameUtils.getExtension(multipartFile.getOriginalFilename())), file);
+            log.info("saved marked image");
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         Cat cat = Cat.builder()
                 .fileName(multipartFile.getOriginalFilename())
+                .markedFileName("marked_" + multipartFile.getOriginalFilename())
                 .catsFirstCount(count[0])
                 .catsSecondCount(count[1])
                 .build();

@@ -23,6 +23,9 @@ public class Cat {
     @Column(name = "filename")
     private String fileName;
 
+    @Column(name = "marked_filename")
+    private String markedFileName;
+
     @Column(name = "cats_first_count")
     private int catsFirstCount;
 

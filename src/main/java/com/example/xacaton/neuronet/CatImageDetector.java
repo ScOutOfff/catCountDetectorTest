@@ -42,6 +42,7 @@ public class CatImageDetector {
                 g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
             }
             g2d.dispose();
+
 //            ImageIcon icon = new ImageIcon(image);
 //            JFrame window = new JFrame("Результат");
 //            window.setLocationByPlatform(true);

@@ -53,4 +53,15 @@ public class CatController {
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
+    @GetMapping(value = "/getCatMarkedImage/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getMarkedImage(@PathVariable("id") Long id) throws IOException {
+        Cat cat = catService.getCatFromDB(id);
+        BufferedImage image = ImageIO.read(new File("src/main/resources/images/" + cat.getMarkedFileName()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
 }

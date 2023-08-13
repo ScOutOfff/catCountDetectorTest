@@ -3,6 +3,7 @@
 - http://localhost:8080/cats/count - post-запрос с form-data файлом, получает изображение по ключевому слову "cat", отдает json с id, fileName, catsFirstCount, catsSecondCount
 - http://localhost:8080/cats/getCats/{id} - get-запрос принимающий id вместо {id}, отдает все то же, что и предыдующий запрос, ничего не сохраняет
 - http://localhost:8080/cats/getCatImage/{id} - get-запрос, принимающий id вместо {id}, отдает картинку с котом, которая была отправлена в первом запросе
+- http://localhost:8080/cats/getCatMarkedImage/{id} - get-запрос, принимающий id вместо {id}, отдает картинку на которой отмечен кот
 
 Для запуска проекта
 -
